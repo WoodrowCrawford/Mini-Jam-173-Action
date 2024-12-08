@@ -30,12 +30,18 @@ public class DodgeTriggerBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Testing"))
-        {
-            Debug.Log("WITCH TIME");
 
-            OnSuccessfulDodge.Invoke();
+        if (_dashTrigger.gameObject.tag == "DashTrigger"  && _dashTrigger.GetComponent<SphereCollider>().enabled)
+        {
+            if (other.CompareTag("Testing"))
+            {
+                Debug.Log("WITCH TIME");
+
+                OnSuccessfulDodge.Invoke();
+            }
         }
+
+        
     }
 
     private void OnTriggerExit(Collider other)

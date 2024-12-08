@@ -9,6 +9,7 @@ public class PlayerInputBehavior : MonoBehaviour
 
     public static event PlayerInputEventHandler OnDodgeStarted;
     public static event PlayerInputEventHandler OnDodgeEnded;
+    public static event PlayerInputEventHandler OnAttack;
 
     [SerializeField] private PlayerControls playerInputActions;    //the player input action map
 
@@ -55,7 +56,7 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Movement.performed += ctx => _animator.SetBool("IsMoving", true);
         playerInputActions.Default.Movement.canceled += ctx => _animator.SetBool("IsMoving", false);
 
-        playerInputActions.Default.Attack.performed += ctx => HandleAttack();
+        playerInputActions.Default.Attack.performed +=ctx => OnAttack?.Invoke();
 
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
     }
@@ -63,6 +64,13 @@ public class PlayerInputBehavior : MonoBehaviour
     private void OnDisable()
     {
         playerInputActions.Disable();
+
+        playerInputActions.Default.Movement.performed -= ctx => _animator.SetBool("IsMoving", true);
+        playerInputActions.Default.Movement.canceled -= ctx => _animator.SetBool("IsMoving", false);
+
+        playerInputActions.Default.Attack.performed -= ctx => OnAttack?.Invoke();
+
+        playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
     }
 
 

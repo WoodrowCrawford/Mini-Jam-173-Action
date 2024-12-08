@@ -31,7 +31,7 @@ public class TimeManipulationBehavior : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(Time.timeScale);
+        
     }
 
 
