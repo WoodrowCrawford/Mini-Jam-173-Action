@@ -7,14 +7,16 @@ public class PlayerInputBehavior : MonoBehaviour
 
     public delegate void PlayerInputEventHandler();
 
- 
+    public static event PlayerInputEventHandler OnDodgeStarted;
+    public static event PlayerInputEventHandler OnDodgeEnded;
 
     [SerializeField] private PlayerControls playerInputActions;    //the player input action map
 
 
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField] private Animator _animator;                //character animator
-
+    [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private CapsuleCollider _playerCollider;
 
     [SerializeField] private float _speed;
   
@@ -27,6 +29,7 @@ public class PlayerInputBehavior : MonoBehaviour
     [SerializeField] private float _dashingTime = 0.2f;
     [SerializeField] private float _dashingCooldown = 1f;
 
+   
 
 
 
@@ -36,6 +39,10 @@ public class PlayerInputBehavior : MonoBehaviour
        
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
+        _trailRenderer = GetComponent<TrailRenderer>();
+        _playerCollider = GetComponent<CapsuleCollider>();
+       
+       
     }
 
 
@@ -55,8 +62,6 @@ public class PlayerInputBehavior : MonoBehaviour
 
     private void OnDisable()
     {
-        
-
         playerInputActions.Disable();
     }
 
@@ -113,20 +118,31 @@ public class PlayerInputBehavior : MonoBehaviour
         _isDashing = true;
 
         _rigidbody.isKinematic = false;
-        
-        //dash in the direction the player is moving
+
+      
         
         //get the current direction and store it in a variable
-
         Vector3 currentDirection = playerInputActions.Default.Movement.ReadValue<Vector3>().normalized;
 
-        Debug.Log("Dash at " +  currentDirection);
 
+        //dash in the direction the player is moving
         _rigidbody.linearVelocity = new Vector3(currentDirection.x * _dashPower, 0, currentDirection.z * _dashPower);
+        _trailRenderer.emitting = true;
+
+        //enable the dash dodge trigger
+        OnDodgeStarted?.Invoke();
+        _playerCollider.enabled = false;
+       
 
         yield return new WaitForSeconds(_dashingTime);
 
+        //disable the dash dodge trigger
+        OnDodgeEnded?.Invoke();
+        _playerCollider.enabled = true;
+
+
         _rigidbody.isKinematic = true;
+        _trailRenderer.emitting = false;
 
         _isDashing = false;
         yield return new WaitForSeconds(_dashingCooldown);
