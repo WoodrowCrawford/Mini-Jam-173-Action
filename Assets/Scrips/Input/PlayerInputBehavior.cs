@@ -70,19 +70,20 @@ public class PlayerInputBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        HandleMovement();
+       
     }
 
 
     private void FixedUpdate()
     {
-        HandleMovement();
+        //HandleMovement();
     }
 
     public void HandleMovement()
@@ -92,16 +93,17 @@ public class PlayerInputBehavior : MonoBehaviour
             return;
         }
 
-        Vector3 movementDirection = new Vector3(playerInputActions.Default.Movement.ReadValue<Vector3>().x,  0, playerInputActions.Default.Movement.ReadValue<Vector3>().y);
+        Vector3 movementDirection = new Vector3(playerInputActions.Default.Movement.ReadValue<Vector3>().x / Time.timeScale,  0, playerInputActions.Default.Movement.ReadValue<Vector3>().y /Time.timeScale);
         movementDirection.Normalize();
 
-        transform.Translate(movementDirection * _speed  * Time.deltaTime,  Space.World);
+        transform.Translate(movementDirection * _speed  * Time.unscaledDeltaTime,  Space.World);
 
         if (movementDirection != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, _rotationSpeed * Time.unscaledDeltaTime);
+            
         }
 
     }
@@ -126,15 +128,17 @@ public class PlayerInputBehavior : MonoBehaviour
 
 
         //dash in the direction the player is moving
-        _rigidbody.linearVelocity = new Vector3(currentDirection.x * _dashPower, 0, currentDirection.z * _dashPower);
+        _rigidbody.AddForce(currentDirection.x * _dashPower / Time.timeScale, 0, currentDirection.z * _dashPower / Time.timeScale, ForceMode.VelocityChange);
+
+        //_rigidbody.linearVelocity = new Vector3(currentDirection.x * _dashPower * Time.fixe, currentDirection.y * _dashPower, currentDirection.z * _dashPower);
         _trailRenderer.emitting = true;
 
         //enable the dash dodge trigger
         OnDodgeStarted?.Invoke();
         _playerCollider.enabled = false;
-       
 
-        yield return new WaitForSeconds(_dashingTime);
+        yield return new WaitForSecondsRealtime(_dashingTime);
+    
 
         //disable the dash dodge trigger
         OnDodgeEnded?.Invoke();
@@ -145,7 +149,7 @@ public class PlayerInputBehavior : MonoBehaviour
         _trailRenderer.emitting = false;
 
         _isDashing = false;
-        yield return new WaitForSeconds(_dashingCooldown);
+        yield return new WaitForSecondsRealtime(_dashingCooldown);
     }
     
 }

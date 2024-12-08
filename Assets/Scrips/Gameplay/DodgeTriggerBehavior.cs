@@ -3,6 +3,9 @@ using UnityEngine;
 public class DodgeTriggerBehavior : MonoBehaviour
 {
 
+    public delegate void DodgeEventHandler();
+
+    public static event DodgeEventHandler OnSuccessfulDodge;
 
     private void Awake()
     {
@@ -30,7 +33,8 @@ public class DodgeTriggerBehavior : MonoBehaviour
         if(other.CompareTag("Testing"))
         {
             Debug.Log("WITCH TIME");
-            
+
+            OnSuccessfulDodge.Invoke();
         }
     }
 
