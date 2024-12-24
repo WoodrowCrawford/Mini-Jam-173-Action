@@ -7,9 +7,12 @@ public class DodgeTriggerBehavior : MonoBehaviour
 
     public static event DodgeEventHandler OnSuccessfulDodge;
 
+    public EnemyWeaponBehavior enemyWeapon;
+
     private void Awake()
     {
         _dashTrigger = GameObject.FindGameObjectWithTag("DashTrigger");
+        enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
     }
 
     private void OnEnable()
@@ -39,7 +42,15 @@ public class DodgeTriggerBehavior : MonoBehaviour
 
                 OnSuccessfulDodge.Invoke();
             }
+
+            if (other.CompareTag("EnemyWeapon") && enemyWeapon.damageBox.enabled)
+            {
+                OnSuccessfulDodge.Invoke();
+            }
+
         }
+
+       
 
         
     }

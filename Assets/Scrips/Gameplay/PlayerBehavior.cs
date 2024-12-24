@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,17 +36,21 @@ public class PlayerBehavior : MonoBehaviour
 
     public void Attack()
     {
-        if (Time.time - lastComboEnd > 0.2f && comboCounter <= combos.Count)
+        
+
+        if (Time.unscaledTime - lastComboEnd > 0.2f && comboCounter <= combos.Count)
         {
+            weapon.damageBox.enabled = true;
+
             CancelInvoke("EndCombo");
 
-            if(Time.unscaledTime - lastClickedTime >= 0.2f)
+            if(Time.unscaledTime - lastClickedTime >= 0.5f)
             {
                 animator.runtimeAnimatorController = combos[comboCounter]._animatorOV;
                 animator.Play("Attack State", 0, 0);
-                weapon.damage= combos[comboCounter].damage;
+                WeaponBehavior.damage= combos[comboCounter].damage;
                 comboCounter++;
-                lastClickedTime = Time.time;
+                lastClickedTime = Time.unscaledTime;
 
                 if (comboCounter >= combos.Count)
                 {
@@ -53,13 +58,22 @@ public class PlayerBehavior : MonoBehaviour
                 }
             }
         }
+
+        
     }
 
     public void ExitAttack()
     {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+
+        
+
+
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.65f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
-            Invoke("EndCombo", 1f *Time.unscaledTime);
+
+           weapon.damageBox.enabled = false;
+            Invoke("EndCombo", 0.5f);
+
         }
     }
 
@@ -67,6 +81,14 @@ public class PlayerBehavior : MonoBehaviour
     {
         comboCounter = 0;
         lastComboEnd = Time.unscaledTime;
+    }
+
+    public IEnumerator TakeDamage()
+    {
+        //die, then wait a second and reset the game
+        animator.SetTrigger("Die");
+        yield return null;
+        
     }
 
 }

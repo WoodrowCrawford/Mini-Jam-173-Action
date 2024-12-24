@@ -1,5 +1,8 @@
 using System.Collections;
 using UnityEngine;
+using Unity.Cinemachine;
+using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Rendering;
 
 public class TimeManipulationBehavior : MonoBehaviour
 {
@@ -11,10 +14,19 @@ public class TimeManipulationBehavior : MonoBehaviour
     [SerializeField] private float _timeInSlowMotion;
     [SerializeField] private float _cooldown;
 
+    [Header("Virtual Camera properties")]
+    [SerializeField] private CinemachineCamera _vCam;
+    [SerializeField] private VolumeProfile _slowMotionEffect;
 
 
 
+    private void Awake()
+    {
+        _vCam = GameObject.FindGameObjectWithTag("vCam").GetComponent<CinemachineCamera>();
+        _vCam.GetComponent<CinemachineVolumeSettings>().Profile = null;
 
+        
+    }
 
     private void OnEnable()
     {
@@ -46,6 +58,7 @@ public class TimeManipulationBehavior : MonoBehaviour
 
         //set time is slowed to true
         _isTimeSlowed = true;
+        _vCam.GetComponent<CinemachineVolumeSettings>().Profile = _slowMotionEffect;
 
         Time.timeScale = 0.3f;
         Time.fixedDeltaTime = 0.03f * Time.timeScale;
@@ -56,6 +69,8 @@ public class TimeManipulationBehavior : MonoBehaviour
         //revert time
         Time.timeScale = 1.0f;
        Time.fixedDeltaTime *= Time.timeScale;
+
+        _vCam.GetComponent<CinemachineVolumeSettings>().Profile = null;
 
         //wait until the cool down is over
         yield return new WaitForSecondsRealtime(_cooldown);

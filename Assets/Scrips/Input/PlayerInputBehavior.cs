@@ -18,6 +18,7 @@ public class PlayerInputBehavior : MonoBehaviour
     [SerializeField] private Animator _animator;                //character animator
     [SerializeField] private TrailRenderer _trailRenderer;
     [SerializeField] private CapsuleCollider _playerCollider;
+    [SerializeField] private Transform _camera;
 
     [SerializeField] private float _speed;
   
@@ -42,6 +43,7 @@ public class PlayerInputBehavior : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _trailRenderer = GetComponent<TrailRenderer>();
         _playerCollider = GetComponent<CapsuleCollider>();
+        _camera = GameObject.FindGameObjectWithTag("Camera").transform;
        
        
     }
@@ -85,6 +87,7 @@ public class PlayerInputBehavior : MonoBehaviour
     void Update()
     {
         HandleMovement();
+        HandleLook();
        
     }
 
@@ -102,7 +105,10 @@ public class PlayerInputBehavior : MonoBehaviour
         }
 
         Vector3 movementDirection = new Vector3(playerInputActions.Default.Movement.ReadValue<Vector3>().x / Time.timeScale,  0, playerInputActions.Default.Movement.ReadValue<Vector3>().y /Time.timeScale);
+       
+        movementDirection = _camera.transform.forward * movementDirection.z + _camera.right * movementDirection.x;
         movementDirection.Normalize();
+        movementDirection.y = 0;
 
         transform.Translate(movementDirection * _speed  * Time.unscaledDeltaTime,  Space.World);
 
@@ -116,6 +122,11 @@ public class PlayerInputBehavior : MonoBehaviour
 
     }
 
+    public void HandleLook()
+    {
+        Debug.Log(playerInputActions.Default.Look.ReadValue<Vector2>());
+    }    
+
 
     public void HandleAttack()
     {
@@ -127,13 +138,19 @@ public class PlayerInputBehavior : MonoBehaviour
         _canDash = false;
         _isDashing = true;
 
-        _rigidbody.isKinematic = false;
+      
 
       
         
         //get the current direction and store it in a variable
         Vector3 currentDirection = playerInputActions.Default.Movement.ReadValue<Vector3>().normalized;
 
+        //take account of the camera
+        currentDirection = _camera.transform.forward * currentDirection.z + _camera.right * currentDirection.x;
+        currentDirection.Normalize();
+        currentDirection.y = 0;
+
+         _rigidbody.isKinematic =false;
 
         //dash in the direction the player is moving
         _rigidbody.AddForce(currentDirection.x * _dashPower / Time.timeScale, 0, currentDirection.z * _dashPower / Time.timeScale, ForceMode.VelocityChange);
@@ -151,12 +168,16 @@ public class PlayerInputBehavior : MonoBehaviour
         //disable the dash dodge trigger
         OnDodgeEnded?.Invoke();
         _playerCollider.enabled = true;
+       _rigidbody.isKinematic = true;
 
 
-        _rigidbody.isKinematic = true;
         _trailRenderer.emitting = false;
 
         _isDashing = false;
+
+        yield return new WaitForSecondsRealtime(0.04f);
+        _rigidbody.isKinematic =false;
+
         yield return new WaitForSecondsRealtime(_dashingCooldown);
     }
     

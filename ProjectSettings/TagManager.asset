@@ -7,15 +7,19 @@ TagManager:
   - DashTrigger
   - Testing
   - Weapon
+  - Camera
+  - vCam
+  - Enemy
+  - EnemyWeapon
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - PostProcessing
   - Water
   - UI
-  - 
-  - 
+  - NavMesh
+  - Player
   - 
   - 
   - 
