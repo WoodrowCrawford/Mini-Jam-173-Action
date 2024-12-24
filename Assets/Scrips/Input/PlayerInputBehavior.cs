@@ -152,9 +152,18 @@ public class PlayerInputBehavior : MonoBehaviour
 
          _rigidbody.isKinematic =false;
 
-        //dash in the direction the player is moving
-        _rigidbody.AddForce(currentDirection.x * _dashPower / Time.timeScale, 0, currentDirection.z * _dashPower / Time.timeScale, ForceMode.VelocityChange);
+        //if the player is not moving then dash forward by default
+        if (currentDirection.magnitude <= 0.1)
+        {
+            _rigidbody.AddForce(transform.forward.x * _dashPower / Time.timeScale, 0, transform.forward.z * _dashPower / Time.timeScale, ForceMode.VelocityChange);
+        }
+        else
+        {
+            //dash in the direction the player is moving
+            _rigidbody.AddForce(currentDirection.x * _dashPower / Time.timeScale, 0, currentDirection.z * _dashPower / Time.timeScale, ForceMode.VelocityChange);
+        }
 
+        
         //_rigidbody.linearVelocity = new Vector3(currentDirection.x * _dashPower * Time.fixe, currentDirection.y * _dashPower, currentDirection.z * _dashPower);
         _trailRenderer.emitting = true;
 
