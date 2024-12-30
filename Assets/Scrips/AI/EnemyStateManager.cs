@@ -170,11 +170,6 @@ public class EnemyStateManager : MonoBehaviour
             animator.SetTrigger("Attack");
 
 
-            
-
-
-
-
         }
 
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)

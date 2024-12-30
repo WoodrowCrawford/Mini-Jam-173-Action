@@ -7,7 +7,7 @@ public class EnemyWeaponBehavior : MonoBehaviour
     public static event EnemyWeaponEventHandler OnEnemyAttackHit;
 
     public BoxCollider damageBox;
-    public static float damage;
+    public int damage;
 
 
 

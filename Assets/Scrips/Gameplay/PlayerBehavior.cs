@@ -4,29 +4,49 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
+    public delegate void PlayerEventHandler();
+
+    public static event PlayerEventHandler onDeath;
+
 
     [SerializeField] public WeaponBehavior weapon;
+    public EnemyWeaponBehavior enemyWeapon;
+    public Animator animator;
+
+    [Header("Player values")]
+    public int health = 3;
+    public bool isDead = false;
+    public bool canBeDamaged = false;
+    public float invulnerabilityTime = 1f;
+
+    [Header("Combo values")]
     public List<AttackSO> combos;
     public float lastClickedTime;
     public float lastComboEnd;
-
     public int comboCounter;
 
-    public Animator animator;
+    
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
     }
 
     private void OnEnable()
     {
+        onDeath += Die;
+
         PlayerInputBehavior.OnAttack += Attack;
+        EnemyWeaponBehavior.OnEnemyAttackHit += () =>  StartCoroutine(TakeDamage());
     }
 
     private void OnDisable()
     {
+        onDeath -= Die;
+
         PlayerInputBehavior.OnAttack -= Attack;
+        EnemyWeaponBehavior.OnEnemyAttackHit -= () => StartCoroutine(TakeDamage());
     }
 
     private void Update()
@@ -37,7 +57,6 @@ public class PlayerBehavior : MonoBehaviour
     public void Attack()
     {
         
-
         if (Time.unscaledTime - lastComboEnd > 0.2f && comboCounter <= combos.Count)
         {
             weapon.damageBox.enabled = true;
@@ -58,15 +77,10 @@ public class PlayerBehavior : MonoBehaviour
                 }
             }
         }
-
-        
     }
 
     public void ExitAttack()
     {
-
-        
-
 
         if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.65f && animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
@@ -83,12 +97,46 @@ public class PlayerBehavior : MonoBehaviour
         lastComboEnd = Time.unscaledTime;
     }
 
+    public void Die()
+    {
+        
+        animator.SetTrigger("Die");
+        Debug.Log("Die");
+        
+    }
+
     public IEnumerator TakeDamage()
     {
-        //die, then wait a second and reset the game
-        animator.SetTrigger("Die");
+        //first check if they can take damage
+        if(canBeDamaged)
+        {
+            //if true, check to see if the player is already dead
+
+            if (!isDead)
+            {
+
+                //take damage
+                health = health - enemyWeapon.damage;
+
+                
+
+                if(health <= 0)
+                {
+                    health = 0;
+                    onDeath?.Invoke();
+                    Debug.Log("Do death stuff");
+                }
+
+                canBeDamaged = false;
+                yield return new WaitForSecondsRealtime(invulnerabilityTime);
+                canBeDamaged = true;
+
+               
+            }
+        }
+        //if false, return false
         yield return null;
-        
+
     }
 
 }

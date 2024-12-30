@@ -23,6 +23,7 @@ public class PlayerInputBehavior : MonoBehaviour
     [SerializeField] private float _speed;
   
     [SerializeField] private float _rotationSpeed;
+    
 
     [Header("DashProperties")]
     [SerializeField] private bool _isDashing;
@@ -54,7 +55,10 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions = new PlayerControls();
         playerInputActions.Enable();
 
-       
+
+        PlayerBehavior.onDeath += () => playerInputActions.Default.Disable();
+
+
         playerInputActions.Default.Movement.performed += ctx => _animator.SetBool("IsMoving", true);
         playerInputActions.Default.Movement.canceled += ctx => _animator.SetBool("IsMoving", false);
 
@@ -66,6 +70,8 @@ public class PlayerInputBehavior : MonoBehaviour
     private void OnDisable()
     {
         playerInputActions.Disable();
+
+        PlayerBehavior.onDeath -= () => playerInputActions.Default.Disable();
 
         playerInputActions.Default.Movement.performed -= ctx => _animator.SetBool("IsMoving", true);
         playerInputActions.Default.Movement.canceled -= ctx => _animator.SetBool("IsMoving", false);

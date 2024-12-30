@@ -8,6 +8,7 @@ public class EnemyDeathState : EnemyBaseState
         enemy.animator.SetTrigger("Die");
         enemy.isDead = true;
         enemy.agent.isStopped = true;
+        enemy.canBeDamaged = false;
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)

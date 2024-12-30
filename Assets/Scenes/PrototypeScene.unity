@@ -2184,6 +2184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 1899475216}
+  animator: {fileID: 2146461150}
+  health: 3
+  isDead: 0
+  canBeDamaged: 1
   combos:
   - {fileID: 11400000, guid: 7d2acd587335eb742b5e58e34777d998, type: 2}
   - {fileID: 11400000, guid: e2297c60e8ef4cb43b72438cd1fd461d, type: 2}
@@ -2191,7 +2195,6 @@ MonoBehaviour:
   lastClickedTime: 0
   lastComboEnd: 0
   comboCounter: 0
-  animator: {fileID: 2146461150}
 --- !u!4 &2146461157 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8855052669661678444, guid: 2dfbb63c9cdf7504faf4ff26b0581598, type: 3}
