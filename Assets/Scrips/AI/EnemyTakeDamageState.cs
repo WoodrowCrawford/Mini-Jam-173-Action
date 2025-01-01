@@ -13,6 +13,9 @@ public class EnemyTakeDamageState : EnemyBaseState
             enemy.animator.SetTrigger("TakeDamage");
             enemy.health -= WeaponBehavior.damage;
 
+            //play the take damage sound
+            SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.characterHitClip, enemy.transform, false, 1f, 0.5f);
+
             enemy.StartCoroutine(EnumeratorState(enemy));
         }
 

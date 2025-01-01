@@ -177,6 +177,9 @@ public class PlayerInputBehavior : MonoBehaviour
         OnDodgeStarted?.Invoke();
         _playerCollider.enabled = false;
 
+        //play the dash sound
+       // SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dashSoundClip, this.transform, false, 1f );
+
         yield return new WaitForSecondsRealtime(_dashingTime);
     
 

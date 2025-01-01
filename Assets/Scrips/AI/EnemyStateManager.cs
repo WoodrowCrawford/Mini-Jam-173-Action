@@ -197,4 +197,14 @@ public class EnemyStateManager : MonoBehaviour
     {
         enemyWeapon.damageBox.enabled = false;
     }
+
+    public void PlayFootstepLeftSound()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.footstepLeftClip, this.transform, false, 1f);
+    }
+
+    public void PlayFootstepRightSound() 
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.footstepRightClip, this.transform, false, 1f);
+    }
 }

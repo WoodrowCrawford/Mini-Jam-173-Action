@@ -57,6 +57,8 @@ public class PlayerBehavior : MonoBehaviour
     public void Attack()
     {
         
+
+
         if (Time.unscaledTime - lastComboEnd > 0.2f && comboCounter <= combos.Count)
         {
             weapon.damageBox.enabled = true;
@@ -65,6 +67,9 @@ public class PlayerBehavior : MonoBehaviour
 
             if(Time.unscaledTime - lastClickedTime >= 0.5f)
             {
+                //play attack sound
+                SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.swordHitClip, this.transform, false, 1f, 0.5f);
+
                 animator.runtimeAnimatorController = combos[comboCounter]._animatorOV;
                 animator.Play("Attack State", 0, 0);
                 WeaponBehavior.damage= combos[comboCounter].damage;
@@ -118,6 +123,8 @@ public class PlayerBehavior : MonoBehaviour
                 //take damage
                 health = health - enemyWeapon.damage;
 
+                //play take damage sound
+                SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.characterHitClip, this.transform, false, 1f, 0.5f);
                 
 
                 if(health <= 0)
@@ -139,4 +146,13 @@ public class PlayerBehavior : MonoBehaviour
 
     }
 
+    public void PlayFootstepLeftSound()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.footstepLeftClip, this.transform, false, 1f);
+    }
+
+    public void PlayFootstepRightSound()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.footstepRightClip, this.transform, false, 1f);
+    }
 }
