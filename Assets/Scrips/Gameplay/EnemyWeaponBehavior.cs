@@ -18,9 +18,6 @@ public class EnemyWeaponBehavior : MonoBehaviour
             //call the player attack hit event
             Debug.Log("Player has been hit");
             OnEnemyAttackHit?.Invoke();
-
-
-
         }
     }
 

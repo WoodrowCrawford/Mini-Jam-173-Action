@@ -7,7 +7,9 @@ public class PlayerBehavior : MonoBehaviour
     public delegate void PlayerEventHandler();
 
     public static event PlayerEventHandler onDeath;
+    public static event PlayerEventHandler onHealthChangedCallback;
 
+    public static PlayerBehavior instance;
 
     [SerializeField] public WeaponBehavior weapon;
     public EnemyWeaponBehavior enemyWeapon;
@@ -15,6 +17,10 @@ public class PlayerBehavior : MonoBehaviour
 
     [Header("Player values")]
     public int health = 3;
+    public int maxHealth;
+   
+    public int maxTotalHealth;
+
     public bool isDead = false;
     public bool canBeDamaged = false;
     public float invulnerabilityTime = 1f;
@@ -29,6 +35,17 @@ public class PlayerBehavior : MonoBehaviour
 
     private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+
+            Destroy(gameObject);
+        }
+
         animator = GetComponent<Animator>();
         enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
     }
@@ -39,6 +56,7 @@ public class PlayerBehavior : MonoBehaviour
 
         PlayerInputBehavior.OnAttack += Attack;
         EnemyWeaponBehavior.OnEnemyAttackHit += () =>  StartCoroutine(TakeDamage());
+        EnemyDeathState.onEnemyKilledWithTimeSlow += () => Heal(1);
     }
 
     private void OnDisable()
@@ -47,6 +65,7 @@ public class PlayerBehavior : MonoBehaviour
 
         PlayerInputBehavior.OnAttack -= Attack;
         EnemyWeaponBehavior.OnEnemyAttackHit -= () => StartCoroutine(TakeDamage());
+        EnemyDeathState.onEnemyKilledWithTimeSlow -= () => Heal(1);
     }
 
     private void Update()
@@ -122,6 +141,7 @@ public class PlayerBehavior : MonoBehaviour
 
                 //take damage
                 health = health - enemyWeapon.damage;
+                ClampHealth();
 
                 //play take damage sound
                 SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.characterHitClip, this.transform, false, 1f, 0.5f);
@@ -154,5 +174,34 @@ public class PlayerBehavior : MonoBehaviour
     public void PlayFootstepRightSound()
     {
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.footstepRightClip, this.transform, false, 1f);
+    }
+
+
+    public void Heal(int health)
+    {
+        SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.healClip, this.transform, false, 1f, 1f);
+
+        this.health += health;
+        ClampHealth();
+    }
+
+    public void AddHealth()
+    {
+        if (maxHealth < maxTotalHealth)
+        {
+            maxHealth += 1;
+            health = maxHealth;
+
+            if (onHealthChangedCallback != null)
+                onHealthChangedCallback.Invoke();
+        }
+    }
+
+    void ClampHealth()
+    {
+        health = Mathf.Clamp(health, 0, maxHealth);
+
+        if (onHealthChangedCallback != null)
+            onHealthChangedCallback.Invoke();
     }
 }

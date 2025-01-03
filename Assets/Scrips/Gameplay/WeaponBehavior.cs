@@ -17,9 +17,7 @@ public class WeaponBehavior : MonoBehaviour
         {
             //call the player attack hit event
             OnPlayerAttackHit?.Invoke();
-            
-            
-
+      
         }
     }
 

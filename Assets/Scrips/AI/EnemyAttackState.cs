@@ -5,7 +5,15 @@ public class EnemyAttackState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
-        enemy.Attack();
+        if (enemy.isDead)
+        {
+            return;
+        }
+
+
+        enemy.StartCoroutine(enemy.Attack());
+        
+        
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)
@@ -13,9 +21,9 @@ public class EnemyAttackState : EnemyBaseState
         throw new System.NotImplementedException();
     }
 
-    public override void ExitState()
+    public override void ExitState(EnemyStateManager enemy)
     {
-        throw new System.NotImplementedException();
+        enemy.StopCoroutine(enemy.Attack());
     }
 
     public override void UpdateState(EnemyStateManager enemy)
@@ -27,12 +35,12 @@ public class EnemyAttackState : EnemyBaseState
 
         if (enemy.playerInSight && !enemy.playerInAttackRange)
         {
-            enemy.Chase();
+            enemy.SwitchState(enemy.chaseState);
         }
 
-        if (enemy.playerInSight && enemy.playerInAttackRange)
+        if (enemy.playerInSight && enemy.playerInAttackRange && enemy.canAttackAgain && !enemy.isDead)
         {
-            enemy.SwitchState(enemy.attackState);
+            enemy.StartCoroutine(enemy.Attack());
         }
     }
 }

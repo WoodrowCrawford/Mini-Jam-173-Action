@@ -93,15 +93,10 @@ public class PlayerInputBehavior : MonoBehaviour
     void Update()
     {
         HandleMovement();
-        HandleLook();
+       
        
     }
 
-
-    private void FixedUpdate()
-    {
-        //HandleMovement();
-    }
 
     public void HandleMovement()
     {
@@ -128,11 +123,6 @@ public class PlayerInputBehavior : MonoBehaviour
 
     }
 
-    public void HandleLook()
-    {
-        Debug.Log(playerInputActions.Default.Look.ReadValue<Vector2>());
-    }    
-
 
     public void HandleAttack()
     {
@@ -144,9 +134,6 @@ public class PlayerInputBehavior : MonoBehaviour
         _canDash = false;
         _isDashing = true;
 
-      
-
-      
         
         //get the current direction and store it in a variable
         Vector3 currentDirection = playerInputActions.Default.Movement.ReadValue<Vector3>().normalized;
@@ -178,7 +165,7 @@ public class PlayerInputBehavior : MonoBehaviour
         _playerCollider.enabled = false;
 
         //play the dash sound
-       // SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dashSoundClip, this.transform, false, 1f );
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dashSoundClip, this.transform, false, 1f );
 
         yield return new WaitForSecondsRealtime(_dashingTime);
     

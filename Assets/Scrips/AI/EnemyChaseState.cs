@@ -10,12 +10,12 @@ public class EnemyChaseState : EnemyBaseState
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)
     {
-        throw new System.NotImplementedException();
+        yield break;
     }
 
-    public override void ExitState()
+    public override void ExitState(EnemyStateManager enemy)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Exiting chase state");
     }
 
     public override void UpdateState(EnemyStateManager enemy)

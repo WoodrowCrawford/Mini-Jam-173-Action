@@ -3,30 +3,44 @@ using UnityEngine;
 
 public class EnemyDeathState : EnemyBaseState
 {
+    public delegate void EnemyDeathStateDelegate();
+
+    public static event EnemyDeathStateDelegate onEnemyKilledWithTimeSlow;
+
     public override void EnterState(EnemyStateManager enemy)
     {
-        enemy.animator.SetTrigger("Die");
         enemy.isDead = true;
+
+        //stop all corutines from running when the enemy dies
+        enemy.StopAllCoroutines();
+
+        //check if the enemy was killed in slow motion
+        if (TimeManipulationBehavior.isTimeSlowed)
+        {
+           onEnemyKilledWithTimeSlow?.Invoke();
+        }
+
+        enemy.animator.SetTrigger("Die");
+
         enemy.agent.isStopped = true;
         enemy.canBeDamaged = false;
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)
     {
-
         yield return null;
-        throw new System.NotImplementedException();
     }
 
-    public override void ExitState()
+    public override void ExitState(EnemyStateManager enemy)
     {
-        return;
+        Debug.Log("Enemy is exiting the death state");
         //throw new System.NotImplementedException();
     }
 
     public override void UpdateState(EnemyStateManager enemy)
     {
+
         return;
-        //throw new System.NotImplementedException();
+     
     }
 }

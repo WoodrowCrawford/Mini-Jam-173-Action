@@ -12,5 +12,5 @@ public abstract class EnemyBaseState
 
     public abstract IEnumerator EnumeratorState(EnemyStateManager enemy);
 
-    public abstract void ExitState();
+    public abstract void ExitState(EnemyStateManager enemy);
 }

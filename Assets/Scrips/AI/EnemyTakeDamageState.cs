@@ -5,52 +5,57 @@ public class EnemyTakeDamageState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
+      
+
         //check to see if the enemy can be damaged
         if (enemy.canBeDamaged)
         {
             enemy.canBeDamaged = false;
 
+            Debug.Log("enemy is taking damage");
             enemy.animator.SetTrigger("TakeDamage");
             enemy.health -= WeaponBehavior.damage;
 
             //play the take damage sound
             SoundFXManager.instance.PlaySoundFXClipAtSetVolume(SoundFXManager.instance.characterHitClip, enemy.transform, false, 1f, 0.5f);
 
-            enemy.StartCoroutine(EnumeratorState(enemy));
-        }
+            if(enemy.health <= 0f)
+            {
+                enemy.SwitchState(enemy.deathState);
+            }
+            else
+            {
+                enemy.StartCoroutine(EnumeratorState(enemy));
+            }
 
-        return;
-       
+            
+        }
+        else if(!enemy.canBeDamaged)
+        {
+            return;
+        }
         
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)
     {
-        //
+        
 
         Debug.Log("Starting....");
         yield return new WaitForSecondsRealtime(enemy.damageTakenCooldown);
         Debug.Log("enemy can be damaged again");
         enemy.canBeDamaged=true;
 
-        if(!enemy.isDead)
-        {
-            enemy.SwitchState(enemy.wanderState);
-        }
-        
-
         yield return null;
     }
 
-    public override void ExitState()
+    public override void ExitState(EnemyStateManager enemy)
     {
-        Debug.Log("exit");
-        //throw new System.NotImplementedException();
+       enemy.StopCoroutine(EnumeratorState(enemy));
     }
 
     public override void UpdateState(EnemyStateManager enemy)
     {
         return;
-        //throw new System.NotImplementedException();
     }
 }

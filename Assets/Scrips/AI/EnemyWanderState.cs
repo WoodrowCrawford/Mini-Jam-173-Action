@@ -5,8 +5,6 @@ public class EnemyWanderState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
-
-
         Debug.Log("wander");
     }
 
@@ -16,9 +14,9 @@ public class EnemyWanderState : EnemyBaseState
         //throw new System.NotImplementedException();
     }
 
-    public override void ExitState()
+    public override void ExitState(EnemyStateManager enemy)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Ending wander state...");
     }
 
     public override void UpdateState(EnemyStateManager enemy)

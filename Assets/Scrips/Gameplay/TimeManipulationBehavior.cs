@@ -10,7 +10,7 @@ public class TimeManipulationBehavior : MonoBehaviour
 
     public static event TimeEventHandler OnTimeSlowed;
 
-    [SerializeField] private bool _isTimeSlowed = false;
+    public static bool isTimeSlowed = false;
     [SerializeField] private float _timeInSlowMotion;
     [SerializeField] private float _cooldown;
 
@@ -51,13 +51,13 @@ public class TimeManipulationBehavior : MonoBehaviour
     public IEnumerator SlowDownTime()
     {
         //check if time is already slowed down
-        if(_isTimeSlowed)
+        if(isTimeSlowed)
         {
             yield return null;
         }
 
         //set time is slowed to true
-        _isTimeSlowed = true;
+        isTimeSlowed = true;
         _vCam.GetComponent<CinemachineVolumeSettings>().Profile = _slowMotionEffect;
 
         Time.timeScale = 0.3f;
@@ -69,6 +69,7 @@ public class TimeManipulationBehavior : MonoBehaviour
         //revert time
         Time.timeScale = 1.0f;
        Time.fixedDeltaTime *= Time.timeScale;
+        isTimeSlowed = false;
 
         _vCam.GetComponent<CinemachineVolumeSettings>().Profile = null;
 

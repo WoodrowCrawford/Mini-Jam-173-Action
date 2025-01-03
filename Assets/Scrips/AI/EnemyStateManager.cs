@@ -20,9 +20,11 @@ public class EnemyStateManager : MonoBehaviour
     [Header("Enemy Values")]
     public float health;
     public float damageTakenCooldown;
+    public float attackCoolDown;
 
     public bool isDead;
     public bool canBeDamaged;
+    public bool canAttackAgain = true;
 
     public EnemyWeaponBehavior enemyWeapon;
 
@@ -65,12 +67,23 @@ public class EnemyStateManager : MonoBehaviour
     {
         WeaponBehavior.OnPlayerAttackHit += () => SwitchState(takeDamageState);
 
+        EnemyBaseState.onSwitchState +=  () => wanderState.ExitState(this);
+        EnemyBaseState.onSwitchState +=() =>  chaseState.ExitState(this);
+        EnemyBaseState.onSwitchState += () => attackState.ExitState(this);
+        EnemyBaseState.onSwitchState += () => takeDamageState.ExitState(this);
+        EnemyBaseState.onSwitchState += () => deathState.ExitState(this);
        
     }
 
     private void OnDisable()
     {
         WeaponBehavior.OnPlayerAttackHit -= () => SwitchState(takeDamageState);
+
+        EnemyBaseState.onSwitchState -= () => wanderState.ExitState(this);
+        EnemyBaseState.onSwitchState -= () => chaseState.ExitState(this);
+        EnemyBaseState.onSwitchState -= () => attackState.ExitState(this);
+        EnemyBaseState.onSwitchState -= () => takeDamageState.ExitState(this);
+        EnemyBaseState.onSwitchState -= () => deathState.ExitState(this);
     }
 
 
@@ -88,16 +101,13 @@ public class EnemyStateManager : MonoBehaviour
 
         animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("PlayerInSight", playerInSight);
+        animator.SetBool("isDead", isDead);
        
 
         currentState.UpdateState(this);
 
 
-        if(health <= 0)
-        {
-
-           SwitchState(deathState);
-        }
+       
     }
 
      public IEnumerator Enumerator()
@@ -162,28 +172,39 @@ public class EnemyStateManager : MonoBehaviour
     }
 
 
-    public void Attack()
+    public IEnumerator Attack()
     {
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack01_SwordAndShiled"))
+        if (!canAttackAgain || isDead)
         {
-            
-            animator.SetTrigger("Attack");
-
-
-        }
-
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f)
-        {
-            Debug.Log("enemy is done attacking");
-
+            Debug.Log("can not attack again!");
+            StopCoroutine(Attack());
+            yield break;
            
-
-            SwitchState(wanderState);
-
-
-
         }
 
+
+        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack01_SwordAndShiled"))
+        {
+           
+            if(!isDead)
+            {
+                //attack
+                animator.SetTrigger("Attack");
+
+                canAttackAgain = false;
+
+                //wait for cool down
+                Debug.Log("Waiting for cooldown");
+                yield return new WaitForSecondsRealtime(attackCoolDown);
+
+
+                Debug.Log("enemy can attack again");
+                canAttackAgain = true;
+            }
+
+           yield break;
+
+        }
 
     }
 

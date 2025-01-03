@@ -12,6 +12,10 @@ public class SoundFXManager : MonoBehaviour
 
     [SerializeField] private AudioSource soundFXObject;
 
+    [Header("UI clips")]
+    public AudioClip healClip;
+
+
     [Header("Footstep Clips")]
     public AudioClip footstepLeftClip;
     public AudioClip footstepRightClip;
