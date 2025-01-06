@@ -9,7 +9,9 @@ public class DodgeTriggerBehavior : MonoBehaviour
 
     public EnemyWeaponBehavior enemyWeapon;
 
-    private void Awake()
+   
+
+    private void Start()
     {
         _dashTrigger = GameObject.FindGameObjectWithTag("DashTrigger");
         enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();

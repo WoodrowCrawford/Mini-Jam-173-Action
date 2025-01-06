@@ -46,6 +46,12 @@ public class PlayerBehavior : MonoBehaviour
             Destroy(gameObject);
         }
 
+        
+    }
+
+
+    private void Start()
+    {
         animator = GetComponent<Animator>();
         enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
     }
