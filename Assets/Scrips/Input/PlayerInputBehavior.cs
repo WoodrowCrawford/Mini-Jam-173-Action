@@ -162,7 +162,7 @@ public class PlayerInputBehavior : MonoBehaviour
 
         //enable the dash dodge trigger
         OnDodgeStarted?.Invoke();
-        _playerCollider.enabled = false;
+        //_playerCollider.enabled = false;
 
         //play the dash sound
         SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dashSoundClip, this.transform, false, 1f );
@@ -172,7 +172,7 @@ public class PlayerInputBehavior : MonoBehaviour
 
         //disable the dash dodge trigger
         OnDodgeEnded?.Invoke();
-        _playerCollider.enabled = true;
+        //_playerCollider.enabled = true;
        _rigidbody.isKinematic = true;
 
 
