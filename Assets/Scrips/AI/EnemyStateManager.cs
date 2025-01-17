@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class EnemyStateManager : MonoBehaviour
 {
-  
+
 
     //Enemy states
     EnemyBaseState currentState;

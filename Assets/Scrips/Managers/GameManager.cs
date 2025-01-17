@@ -2,15 +2,52 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public static GameManager instance;
+
+    public delegate void GameManagerEventHandler();
+
+    public int totalEnemiesDefeated;
+ 
+
+
+
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+
+            Destroy(gameObject);
+        }
+
+       
+
+    }
+
+
+    private void OnEnable()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void OnDisable()
     {
         
     }
+
+    public void CheckWhichWaveToStart()
+    {
+        //check which wave the player is trying to start
+
+        //check if the player can play that wave (have they defeated enough eniemies to unlock it)
+    }
+
+
 }

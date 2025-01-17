@@ -6,10 +6,12 @@ public class EnemyDeathState : EnemyBaseState
     public delegate void EnemyDeathStateDelegate();
 
     public static event EnemyDeathStateDelegate onEnemyKilledWithTimeSlow;
+    public static event EnemyDeathStateDelegate onEnemyDeath;
 
     public override void EnterState(EnemyStateManager enemy)
     {
         enemy.isDead = true;
+        EnemyDeathState.onEnemyDeath?.Invoke();
 
         //stop all corutines from running when the enemy dies
         enemy.StopAllCoroutines();
