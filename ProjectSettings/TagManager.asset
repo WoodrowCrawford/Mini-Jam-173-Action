@@ -11,6 +11,9 @@ TagManager:
   - vCam
   - Enemy
   - EnemyWeapon
+  - Wave1Area
+  - Wave2Area
+  - Wave3Area
   layers:
   - Default
   - TransparentFX

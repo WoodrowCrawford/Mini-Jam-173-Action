@@ -2,31 +2,25 @@ using UnityEngine;
 
 public class Wave1AreaBehavior : MonoBehaviour
 {
-    //Used to create events for this script
     public delegate void Wave1AreaEventHandler();
+    public static event Wave1AreaEventHandler onPlayerEnteredWaveArea1;
 
-
-    public static event Wave1AreaEventHandler onPlayerEnteredWave1Area;
-    public static event Wave1AreaEventHandler onPlayerExitedWave1Area;
+    public bool playerWantsToStartWave1;
 
     public int enemiesRequiredToStart;
-   
-
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            onPlayerEnteredWave1Area?.Invoke();
+            playerWantsToStartWave1 = true;
+            onPlayerEnteredWaveArea1?.Invoke();
+          
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("Player"))
-        {
-            Debug.Log("Player is no longer in the area");
-            onPlayerExitedWave1Area?.Invoke();
-        }
+        playerWantsToStartWave1 = false;
     }
 }
