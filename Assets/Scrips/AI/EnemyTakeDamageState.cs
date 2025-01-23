@@ -46,6 +46,9 @@ public class EnemyTakeDamageState : EnemyBaseState
         Debug.Log("enemy can be damaged again");
         enemy.canBeDamaged=true;
 
+        //switch to wander state after being hit
+        enemy.SwitchState(enemy.wanderState);
+
         yield return null;
     }
 
