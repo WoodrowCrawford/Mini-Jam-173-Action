@@ -3,11 +3,21 @@ using UnityEngine;
 public class EnemyWeaponBehavior : MonoBehaviour
 {
     public delegate void EnemyWeaponEventHandler();
+    public PlayerBehavior playerBehavior;
 
     public static event EnemyWeaponEventHandler OnEnemyAttackHit;
 
     public BoxCollider damageBox;
     public int damage;
+
+
+
+
+    private void Awake()
+    {
+        playerBehavior = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBehavior>();
+    }
+
 
 
 
@@ -17,6 +27,8 @@ public class EnemyWeaponBehavior : MonoBehaviour
         {
             //call the player attack hit event
             Debug.Log("Player has been hit");
+            StartCoroutine(playerBehavior.TakeDamage(damage));
+
             OnEnemyAttackHit?.Invoke();
         }
     }
@@ -28,6 +40,9 @@ public class EnemyWeaponBehavior : MonoBehaviour
     {
 
     }
+
+   
+
 
     public void EnableAttack()
     {

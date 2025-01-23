@@ -12,7 +12,6 @@ public class PlayerBehavior : MonoBehaviour
     public static PlayerBehavior instance;
 
     [SerializeField] public WeaponBehavior weapon;
-    public EnemyWeaponBehavior enemyWeapon;
     public Animator animator;
 
     [Header("Player values")]
@@ -53,7 +52,7 @@ public class PlayerBehavior : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
+      
     }
 
     private void OnEnable()
@@ -61,7 +60,6 @@ public class PlayerBehavior : MonoBehaviour
         onDeath += Die;
 
         PlayerInputBehavior.OnAttack += Attack;
-        EnemyWeaponBehavior.OnEnemyAttackHit += () =>  StartCoroutine(TakeDamage());
         EnemyDeathState.onEnemyKilledWithTimeSlow += () => Heal(1);
     }
 
@@ -70,7 +68,6 @@ public class PlayerBehavior : MonoBehaviour
         onDeath -= Die;
 
         PlayerInputBehavior.OnAttack -= Attack;
-        EnemyWeaponBehavior.OnEnemyAttackHit -= () => StartCoroutine(TakeDamage());
         EnemyDeathState.onEnemyKilledWithTimeSlow -= () => Heal(1);
     }
 
@@ -135,7 +132,7 @@ public class PlayerBehavior : MonoBehaviour
         
     }
 
-    public IEnumerator TakeDamage()
+    public IEnumerator TakeDamage(int damage)
     {
         //first check if they can take damage
         if(canBeDamaged)
@@ -146,7 +143,7 @@ public class PlayerBehavior : MonoBehaviour
             {
 
                 //take damage
-                health = health - enemyWeapon.damage;
+                health = health - damage;
                 ClampHealth();
 
                 //play take damage sound
