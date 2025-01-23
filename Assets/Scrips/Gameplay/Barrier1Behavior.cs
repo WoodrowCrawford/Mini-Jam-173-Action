@@ -20,12 +20,14 @@ public class Barrier1Behavior : MonoBehaviour
     private void OnEnable()
     {
         Wave1CheckerBehavior.onPlayerWantsToEnterWave1Area += CheckIfPlayerCanEnter;
+        Wave1AreaBehavior.onPlayerEnteredWaveArea1 += EnableBarriers;
     }
 
    
     private void OnDisable()
     {
-        
+        Wave1CheckerBehavior.onPlayerWantsToEnterWave1Area -= CheckIfPlayerCanEnter;
+        Wave1AreaBehavior.onPlayerEnteredWaveArea1 -= EnableBarriers;
     }
 
 
@@ -43,6 +45,8 @@ public class Barrier1Behavior : MonoBehaviour
         barrierC.GetComponent<BoxCollider>().enabled = true;
         barrierD.GetComponent<BoxCollider>().enabled = true;
         barrierE.GetComponent<BoxCollider>().enabled = true;
+
+        Debug.Log("Enable barriers");
     }
 
 
@@ -54,6 +58,8 @@ public class Barrier1Behavior : MonoBehaviour
         barrierC.GetComponent<BoxCollider>().enabled = false;
         barrierD.GetComponent<BoxCollider>().enabled = false;
         barrierE.GetComponent<BoxCollider>().enabled = false;
+
+        Debug.Log("Disable barriers");
     }
 
 

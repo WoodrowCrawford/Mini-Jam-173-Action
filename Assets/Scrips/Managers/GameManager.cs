@@ -9,9 +9,7 @@ public class GameManager : MonoBehaviour
 
     public delegate void GameManagerEventHandler();
 
-    public static event GameManagerEventHandler onWave1Started;
-    public static event GameManagerEventHandler onWave2Started;
-    public static event GameManagerEventHandler onWave3Started;
+   
 
 
 
@@ -36,7 +34,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
             Destroy(gameObject);
         }
 
@@ -58,8 +55,4 @@ public class GameManager : MonoBehaviour
        
        
     }
-
-   
-
-
 }

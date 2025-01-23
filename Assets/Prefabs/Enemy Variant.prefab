@@ -142,8 +142,8 @@ NavMeshAgent:
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_AngularSpeed: 180
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -186,8 +186,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 20
   damageTakenCooldown: 0.19
+  attackCoolDown: 0
   isDead: 0
   canBeDamaged: 1
+  canAttackAgain: 1
   enemyWeapon: {fileID: 0}
   agent: {fileID: 0}
   animator: {fileID: 0}
@@ -199,8 +201,8 @@ MonoBehaviour:
     m_Bits: 128
   destPoint: {x: 0, y: 0, z: 0}
   walkPointSet: 0
-  range: 30
-  sightRange: 2
+  range: 10
+  sightRange: 3
   attackRange: 1
   playerInSight: 0
   playerInAttackRange: 0
