@@ -15,8 +15,10 @@ public class WeaponBehavior : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && damageBox.enabled)
         {
-            //call the player attack hit event
-            OnPlayerAttackHit?.Invoke();
+      
+            //grab that enemies take damage function
+            other.TryGetComponent<EnemyStateManager>(out EnemyStateManager enemy);
+            enemy.SwitchState(enemy.takeDamageState);
       
         }
     }

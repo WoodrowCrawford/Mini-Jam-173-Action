@@ -2514,7 +2514,6 @@ GameObject:
   - component: {fileID: 3632395682707694847}
   - component: {fileID: 325499655972169669}
   - component: {fileID: 8818692063761953263}
-  - component: {fileID: 7486717354561185757}
   m_Layer: 0
   m_Name: MaleCharacterPBR
   m_TagString: Untagged
@@ -2607,6 +2606,8 @@ MonoBehaviour:
   _rigidbody: {fileID: 0}
   _animator: {fileID: 9036980633323257398}
   _trailRenderer: {fileID: 8818692063761953263}
+  _playerCollider: {fileID: 0}
+  _camera: {fileID: 0}
   _speed: 5
   _rotationSpeed: 720
   _isDashing: 0
@@ -2771,19 +2772,6 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 0
   m_ApplyActiveColorSpace: 1
---- !u!114 &7486717354561185757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8189980434977739222}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f92f01b299600742a578034f4e156d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _dashTrigger: {fileID: 0}
 --- !u!1 &8206070634150816031
 GameObject:
   m_ObjectHideFlags: 0

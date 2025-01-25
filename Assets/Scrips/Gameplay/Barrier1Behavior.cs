@@ -21,6 +21,7 @@ public class Barrier1Behavior : MonoBehaviour
     {
         Wave1CheckerBehavior.onPlayerWantsToEnterWave1Area += CheckIfPlayerCanEnter;
         Wave1AreaBehavior.onPlayerEnteredWaveArea1 += EnableBarriers;
+        Wave1AreaBehavior.onWave1Ended += DisableBarriers;
     }
 
    
@@ -28,6 +29,7 @@ public class Barrier1Behavior : MonoBehaviour
     {
         Wave1CheckerBehavior.onPlayerWantsToEnterWave1Area -= CheckIfPlayerCanEnter;
         Wave1AreaBehavior.onPlayerEnteredWaveArea1 -= EnableBarriers;
+        Wave1AreaBehavior.onWave1Ended -= DisableBarriers;
     }
 
 

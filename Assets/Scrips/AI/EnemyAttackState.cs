@@ -5,7 +5,7 @@ public class EnemyAttackState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
-        if (enemy.isDead)
+        if (enemy.isDead || PlayerInputBehavior.playerIsInvulnerable)
         {
             return;
         }

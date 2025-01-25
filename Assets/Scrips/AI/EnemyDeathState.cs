@@ -26,6 +26,7 @@ public class EnemyDeathState : EnemyBaseState
 
         enemy.agent.isStopped = true;
         enemy.canBeDamaged = false;
+        GameManager.totalEnemiesDefeated++;
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)

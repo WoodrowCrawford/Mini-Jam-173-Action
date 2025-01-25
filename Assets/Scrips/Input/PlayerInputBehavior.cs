@@ -31,8 +31,10 @@ public class PlayerInputBehavior : MonoBehaviour
     [SerializeField] private float _dashPower;
     [SerializeField] private float _dashingTime = 0.2f;
     [SerializeField] private float _dashingCooldown = 1f;
+    public static bool playerIsInvulnerable = false;
 
-   
+
+
 
 
 
@@ -65,6 +67,12 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Attack.performed +=ctx => OnAttack?.Invoke();
 
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
+
+        TimeManipulationBehavior.OnTimeSlowed += () => playerIsInvulnerable = true;
+     
+
+        TimeManipulationBehavior.OnTimeNormal += () => playerIsInvulnerable = false;
+        
     }
 
     private void OnDisable()
@@ -79,6 +87,12 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Attack.performed -= ctx => OnAttack?.Invoke();
 
         playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
+
+        TimeManipulationBehavior.OnTimeSlowed -= () => playerIsInvulnerable = true;
+      
+
+        TimeManipulationBehavior.OnTimeNormal -= () => playerIsInvulnerable = false;
+      
     }
 
 
@@ -93,6 +107,7 @@ public class PlayerInputBehavior : MonoBehaviour
     void Update()
     {
         HandleMovement();
+       
        
        
     }
@@ -133,7 +148,7 @@ public class PlayerInputBehavior : MonoBehaviour
     {
         _canDash = false;
         _isDashing = true;
-
+        playerIsInvulnerable = true;
         
         //get the current direction and store it in a variable
         Vector3 currentDirection = playerInputActions.Default.Movement.ReadValue<Vector3>().normalized;
@@ -182,6 +197,7 @@ public class PlayerInputBehavior : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.04f);
         _rigidbody.isKinematic =false;
+        playerIsInvulnerable = false;
 
         yield return new WaitForSecondsRealtime(_dashingCooldown);
     }

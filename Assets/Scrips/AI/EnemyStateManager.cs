@@ -24,6 +24,7 @@ public class EnemyStateManager : MonoBehaviour
 
     public bool isDead;
     public bool canBeDamaged;
+    public bool isAttacking;
     public bool canAttackAgain = true;
 
     public EnemyWeaponBehavior enemyWeapon;
@@ -60,7 +61,7 @@ public class EnemyStateManager : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player");
-        enemyWeapon = GameObject.FindGameObjectWithTag("EnemyWeapon").GetComponent<EnemyWeaponBehavior>();
+        enemyWeapon = GetComponentInChildren<EnemyWeaponBehavior>();
     }
 
     private void OnEnable()
@@ -174,37 +175,29 @@ public class EnemyStateManager : MonoBehaviour
 
     public IEnumerator Attack()
     {
-        if (!canAttackAgain || isDead)
+        //if the enemy is not attacking or is dead...
+        if (!isAttacking && canAttackAgain || !isDead)
         {
-            Debug.Log("can not attack again!");
-            StopCoroutine(Attack());
+            //set is attacking to true
+             isAttacking = true;
+            animator.SetTrigger("Attack");
+
+            //set to false
+            canAttackAgain = false;
+            isAttacking = false;
+
+
+            yield return new WaitForSecondsRealtime(attackCoolDown);
+
+            //set to true
+            canAttackAgain = true;
+
             yield break;
-           
-        }
-
-
-        else if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Attack01_SwordAndShiled"))
-        {
-           
-            if(!isDead)
-            {
-                //attack
-                animator.SetTrigger("Attack");
-
-                canAttackAgain = false;
-
-                //wait for cool down
-                Debug.Log("Waiting for cooldown");
-                yield return new WaitForSecondsRealtime(attackCoolDown);
-
-
-                Debug.Log("enemy can attack again");
-                canAttackAgain = true;
-            }
-
-           yield break;
 
         }
+        //
+
+
 
     }
 

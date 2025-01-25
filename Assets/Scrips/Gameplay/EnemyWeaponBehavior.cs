@@ -9,6 +9,7 @@ public class EnemyWeaponBehavior : MonoBehaviour
 
     public BoxCollider damageBox;
     public int damage;
+    public static bool AttackBoxEnabled;
 
 
 
@@ -23,7 +24,7 @@ public class EnemyWeaponBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && damageBox.enabled)
+        if (other.CompareTag("Player") && damageBox.enabled && !PlayerInputBehavior.playerIsInvulnerable)
         {
             //call the player attack hit event
             Debug.Log("Player has been hit");
@@ -47,10 +48,12 @@ public class EnemyWeaponBehavior : MonoBehaviour
     public void EnableAttack()
     {
         damageBox.enabled = true;
+        AttackBoxEnabled = true;
     }
 
     public void DisableAttack()
     {
         damageBox.enabled = false;
+        AttackBoxEnabled = false;
     }
 }

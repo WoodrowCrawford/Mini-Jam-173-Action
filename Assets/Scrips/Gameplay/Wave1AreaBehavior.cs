@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class Wave1AreaBehavior : MonoBehaviour
 {
     public delegate void Wave1AreaEventHandler();
     public static event Wave1AreaEventHandler onPlayerEnteredWaveArea1;
+    public static event Wave1AreaEventHandler onWave1Ended;
 
     public int enemiesRequiredToStart;
 
@@ -20,7 +22,7 @@ public class Wave1AreaBehavior : MonoBehaviour
 
     private void OnEnable()
     {
-        onPlayerEnteredWaveArea1 += StartWave;
+        onPlayerEnteredWaveArea1 += () =>  StartCoroutine(StartWave());
     }
 
 
@@ -39,7 +41,7 @@ public class Wave1AreaBehavior : MonoBehaviour
     }
 
 
-    public void StartWave()
+    public IEnumerator StartWave()
     {
         //first check to see if the wave has already started
         if(!wave1Started)
@@ -52,10 +54,15 @@ public class Wave1AreaBehavior : MonoBehaviour
             {
                 Instantiate(enemyToSpawn, spawnPoints[i].transform.position, Quaternion.identity);
             }
-            
+
             //wait until all the enemies are defeated
+            yield return new WaitUntil(() => GameManager.totalEnemiesDefeated == 2);
 
             //tell the barrier that all the enemies are defeated
+            onWave1Ended?.Invoke();
+
+            yield break;
+
         }
     }
 
