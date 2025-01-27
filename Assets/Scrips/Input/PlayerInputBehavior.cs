@@ -69,8 +69,6 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
 
         TimeManipulationBehavior.OnTimeSlowed += () => playerIsInvulnerable = true;
-     
-
         TimeManipulationBehavior.OnTimeNormal += () => playerIsInvulnerable = false;
         
     }
@@ -89,8 +87,6 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
 
         TimeManipulationBehavior.OnTimeSlowed -= () => playerIsInvulnerable = true;
-      
-
         TimeManipulationBehavior.OnTimeNormal -= () => playerIsInvulnerable = false;
       
     }
@@ -107,9 +103,6 @@ public class PlayerInputBehavior : MonoBehaviour
     void Update()
     {
         HandleMovement();
-       
-       
-       
     }
 
 
