@@ -20,7 +20,16 @@ public class EnemyWeaponBehavior : MonoBehaviour
     }
 
 
+    private void OnEnable()
+    {
+        //disable damage box when time is slowed
+        TimeManipulationBehavior.OnTimeSlowed += () => damageBox.enabled = false;
+    }
 
+    private void OnDisable()
+    {
+        TimeManipulationBehavior.OnTimeSlowed -= () => damageBox.enabled = false;
+    }
 
     private void OnTriggerEnter(Collider other)
     {

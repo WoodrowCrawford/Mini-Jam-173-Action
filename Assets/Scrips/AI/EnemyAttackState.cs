@@ -5,15 +5,21 @@ public class EnemyAttackState : EnemyBaseState
 {
     public override void EnterState(EnemyStateManager enemy)
     {
-        if (enemy.isDead || PlayerInputBehavior.playerIsInvulnerable)
+        //first check if the enemy is dead
+        if (!enemy.isDead)
         {
+            //then check to see if the player is able to take damage 
+            if(!PlayerInputBehavior.playerIsInvulnerable)
+            {
+                enemy.StartCoroutine(enemy.Attack());
+            }
+
             return;
         }
 
 
-        enemy.StartCoroutine(enemy.Attack());
-        
-        
+
+        return;
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)

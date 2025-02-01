@@ -135,7 +135,7 @@ public class PlayerBehavior : MonoBehaviour
     public IEnumerator TakeDamage(int damage)
     {
         //first check if they can take damage
-        if(canBeDamaged)
+        if(canBeDamaged || !PlayerInputBehavior.playerIsInvulnerable)
         {
             //if true, check to see if the player is already dead
 
@@ -165,7 +165,7 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         //if false, return false
-        yield return null;
+        yield break;
 
     }
 
