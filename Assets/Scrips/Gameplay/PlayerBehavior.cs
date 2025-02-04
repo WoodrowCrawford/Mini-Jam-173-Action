@@ -48,19 +48,16 @@ public class PlayerBehavior : MonoBehaviour
         
     }
 
-
-    private void Start()
-    {
-        animator = GetComponent<Animator>();
-      
-    }
-
     private void OnEnable()
     {
         onDeath += Die;
 
         PlayerInputBehavior.OnAttack += Attack;
         EnemyDeathState.onEnemyKilledWithTimeSlow += () => Heal(1);
+
+        //wave clear rewards
+        Wave1AreaBehavior.onWave1Ended += AddHealth;
+        Wave2AreaBehavior.onWave2Ended += AddHealth;
     }
 
     private void OnDisable()
@@ -69,18 +66,29 @@ public class PlayerBehavior : MonoBehaviour
 
         PlayerInputBehavior.OnAttack -= Attack;
         EnemyDeathState.onEnemyKilledWithTimeSlow -= () => Heal(1);
+
+        Wave1AreaBehavior.onWave1Ended -= AddHealth;
+        Wave2AreaBehavior.onWave2Ended -= AddHealth;
     }
+
+
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+   
 
     private void Update()
     {
         ExitAttack();
     }
 
+
     public void Attack()
     {
-        
-
-
+       
         if (Time.unscaledTime - lastComboEnd > 0.2f && comboCounter <= combos.Count)
         {
             weapon.damageBox.enabled = true;
@@ -126,10 +134,8 @@ public class PlayerBehavior : MonoBehaviour
 
     public void Die()
     {
-        
         animator.SetTrigger("Die");
-        Debug.Log("Die");
-        
+        Debug.Log("Die");   
     }
 
     public IEnumerator TakeDamage(int damage)
