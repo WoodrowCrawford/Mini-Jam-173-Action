@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -35,6 +36,8 @@ public class EnemyStateManager : MonoBehaviour
     [SerializeField] public Animator animator;
     [SerializeField] public LayerMask _groundLayer;
     [SerializeField] public LayerMask _playerLayer;
+
+    
 
 
     [Header("Patrolling")]
@@ -140,10 +143,14 @@ public class EnemyStateManager : MonoBehaviour
 
         if (walkPointSet)
         {
+            
+
             agent.SetDestination(destPoint);
+
+            
         }
 
-        if (Vector3.Distance(transform.position, destPoint) < 10)
+        if (Vector3.Distance(transform.position, destPoint) < 3)
         {
             walkPointSet = false;
         }
@@ -153,15 +160,23 @@ public class EnemyStateManager : MonoBehaviour
 
     public void SearchForDest()
     {
-        float z = Random.Range(-range, range);
-        float x = Random.Range(-range, range);
+        /// <summary>
+     float z = Random.Range(-range, range);
+       float x = Random.Range(-range, range);
 
         destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
 
+
+        //WORK ON LEARNING SAMPLE POSISTION
         if(Physics.Raycast(destPoint, Vector3.down, _groundLayer))
-        {
+       {
             walkPointSet = true;
-        }
+       }
+
+      
+
+   
+        
     }
 
 

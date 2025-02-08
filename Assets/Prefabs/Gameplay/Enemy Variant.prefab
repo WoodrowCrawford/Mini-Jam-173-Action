@@ -203,7 +203,7 @@ MonoBehaviour:
     m_Bits: 128
   destPoint: {x: 0, y: 0, z: 0}
   walkPointSet: 0
-  range: 20
+  range: 14
   sightRange: 4
   attackRange: 1
   playerInSight: 0
