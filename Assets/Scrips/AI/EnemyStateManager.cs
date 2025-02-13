@@ -154,31 +154,13 @@ public class EnemyStateManager : MonoBehaviour
 
 
 
-
-    
-
-    public void SearchForDest()
+    public IEnumerator NewSearchForRandomDestination()
     {
-        /// <summary>
-     float z = Random.Range(-range, range);
-       float x = Random.Range(-range, range);
-
-        destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
-
-
-        //WORK ON LEARNING SAMPLE POSISTION
-        if(Physics.Raycast(destPoint, Vector3.down, _groundLayer))
-       {
-            walkPointSet = true;
-       }
-        
-    }
-
-    public void NewSearchForRandomDestination()
-    {
+        //set up random range
         float z = Random.Range(-range, range);
         float x = Random.Range(-range, range);
 
+        //set destinaton point
         destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
 
 
@@ -192,13 +174,15 @@ public class EnemyStateManager : MonoBehaviour
         {
             Debug.Log("found a spot");
 
-            
-
+        
              if(NavMesh.CalculatePath(gameObject.transform.position, destPoint, agent.GetComponent<EnemyStateManager>().areaMask, path))
              {
                 walkPointSet = true;
                 agent.SetPath(path);
                 
+                
+
+
              }
              else
              {
