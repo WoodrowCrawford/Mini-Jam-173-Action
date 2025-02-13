@@ -17,6 +17,7 @@ public class PlayerBehavior : MonoBehaviour
     [Header("Player values")]
     public int health = 3;
     public int maxHealth;
+    
    
     public int maxTotalHealth;
 

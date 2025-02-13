@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class Wave3AreaBehavior : MonoBehaviour
@@ -20,8 +21,10 @@ public class Wave3AreaBehavior : MonoBehaviour
     public Transform[] spawnPoints;
     public GameObject enemyToSpawn;
 
+    [Header("AI NavMesh")]
 
-
+    [SerializeField] private NavMeshSurface navMeshSurface;
+    
 
 
     private void OnEnable()

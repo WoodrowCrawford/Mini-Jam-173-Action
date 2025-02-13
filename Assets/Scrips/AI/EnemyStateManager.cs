@@ -1,4 +1,8 @@
 using System.Collections;
+using System.IO;
+using Unity.AI.Navigation;
+using Unity.VisualScripting;
+using UnityEditor.Analytics;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,6 +20,9 @@ public class EnemyStateManager : MonoBehaviour
     public EnemyTakeDamageState takeDamageState = new EnemyTakeDamageState();
     public EnemyDeathState deathState = new EnemyDeathState();
 
+
+
+    
 
 
     [Header("Enemy Values")]
@@ -36,6 +43,8 @@ public class EnemyStateManager : MonoBehaviour
     [SerializeField] public Animator animator;
     [SerializeField] public LayerMask _groundLayer;
     [SerializeField] public LayerMask _playerLayer;
+
+    public int areaMask;
 
     
 
@@ -100,9 +109,13 @@ public class EnemyStateManager : MonoBehaviour
 
     private void Update()
     {
+
+        CheckWhatNavMeshAgentIsOn();
+
         playerInSight = Physics.CheckSphere(transform.position, sightRange, _playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, _playerLayer);
 
+        
         animator.SetFloat("Speed", agent.velocity.magnitude);
         animator.SetBool("PlayerInSight", playerInSight);
         animator.SetBool("isDead", isDead);
@@ -128,35 +141,21 @@ public class EnemyStateManager : MonoBehaviour
     }
 
 
-
-
-
-
-
-    //WANDER
-    public void Patrol()
+    public void CheckWhatNavMeshAgentIsOn()
     {
-        if (!walkPointSet)
-        {
-            SearchForDest();
-        }
+        NavMeshHit hit;
 
-        if (walkPointSet)
-        {
-            
+        agent.SamplePathPosition(NavMesh.AllAreas, 1, out hit);
+        
+        areaMask = hit.mask;
 
-            agent.SetDestination(destPoint);
-
-            
-        }
-
-        if (Vector3.Distance(transform.position, destPoint) < 3)
-        {
-            walkPointSet = false;
-        }
-
-
+    
     }
+
+
+
+
+    
 
     public void SearchForDest()
     {
@@ -172,11 +171,49 @@ public class EnemyStateManager : MonoBehaviour
        {
             walkPointSet = true;
        }
+        
+    }
 
+    public void NewSearchForRandomDestination()
+    {
+        float z = Random.Range(-range, range);
+        float x = Random.Range(-range, range);
+
+        destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
+
+
+        //get a random path
+        NavMeshPath path = new NavMeshPath();
       
 
-   
+        NavMeshHit hit;
         
+        if(NavMesh.SamplePosition(transform.position, out hit, 1f, NavMesh.AllAreas))
+        {
+            Debug.Log("found a spot");
+
+            
+
+             if(NavMesh.CalculatePath(gameObject.transform.position, destPoint, agent.GetComponent<EnemyStateManager>().areaMask, path))
+             {
+                walkPointSet = true;
+                agent.SetPath(path);
+                
+             }
+             else
+             {
+
+              
+
+             }
+
+        }
+
+        else
+        {
+            Debug.Log("did not find a spot");
+            NewSearchForRandomDestination();
+        }
     }
 
 

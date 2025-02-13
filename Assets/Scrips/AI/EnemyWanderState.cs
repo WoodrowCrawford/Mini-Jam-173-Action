@@ -25,7 +25,7 @@ public class EnemyWanderState : EnemyBaseState
 
         if (!enemy.playerInSight && !enemy.playerInAttackRange)
         {
-            enemy.Patrol();
+            enemy.NewSearchForRandomDestination();
         }
 
         if(enemy.playerInSight && !enemy.playerInAttackRange)
