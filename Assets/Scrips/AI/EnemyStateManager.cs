@@ -154,7 +154,7 @@ public class EnemyStateManager : MonoBehaviour
 
 
 
-    public IEnumerator NewSearchForRandomDestination()
+    public void NewSearchForRandomDestination()
     {
         //set up random range
         float z = Random.Range(-range, range);
