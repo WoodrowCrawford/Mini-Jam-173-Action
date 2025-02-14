@@ -3,6 +3,7 @@ using System.IO;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEditor.Analytics;
+using UnityEditor.PackageManager;
 using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.AI;
@@ -50,7 +51,7 @@ public class EnemyStateManager : MonoBehaviour
 
 
     [Header("Patrolling")]
-    public Vector3 destPoint;
+    public Vector3 randomPoint;
     public bool walkPointSet;
     [SerializeField] float range;
 
@@ -110,7 +111,7 @@ public class EnemyStateManager : MonoBehaviour
     private void Update()
     {
 
-        CheckWhatNavMeshAgentIsOn();
+      
 
         playerInSight = Physics.CheckSphere(transform.position, sightRange, _playerLayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, _playerLayer);
@@ -123,6 +124,7 @@ public class EnemyStateManager : MonoBehaviour
 
         currentState.UpdateState(this);
 
+  
 
        
     }
@@ -145,7 +147,7 @@ public class EnemyStateManager : MonoBehaviour
     {
         NavMeshHit hit;
 
-        agent.SamplePathPosition(NavMesh.AllAreas, 1, out hit);
+        agent.SamplePathPosition(NavMesh.AllAreas, 3f, out hit);
         
         areaMask = hit.mask;
 
@@ -153,51 +155,45 @@ public class EnemyStateManager : MonoBehaviour
     }
 
 
-
-    public void NewSearchForRandomDestination()
+    public IEnumerator NewSearchForRandomDestination()
     {
-        //set up random range
+        CheckWhatNavMeshAgentIsOn();
+
+        NavMeshHit hit;
+
+         //calculate a random path
         float z = Random.Range(-range, range);
         float x = Random.Range(-range, range);
 
-        //set destinaton point
-        destPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
+        randomPoint = new Vector3(transform.position.x + x, transform.position.y, transform.position.z + z);
+       
+
+    
+      if(NavMesh.SamplePosition(randomPoint, out hit, 500f, agent.areaMask))
+      {
+
+        Vector3 finalDestPoint = hit.position;
+
+        agent.SetDestination(finalDestPoint);
 
 
-        //get a random path
-        NavMeshPath path = new NavMeshPath();
-      
+        yield return new WaitUntil(() => Vector3.Distance(agent.transform.position, finalDestPoint) < 3);
 
-        NavMeshHit hit;
+        StartCoroutine(NewSearchForRandomDestination());
+
+          Debug.Log("destination reached");
+
+
+        yield break;
+
+      }
+
+      else
+      {
+        Debug.Log("a point was not found");
+        yield break;
+      }
         
-        if(NavMesh.SamplePosition(transform.position, out hit, 1f, NavMesh.AllAreas))
-        {
-            Debug.Log("found a spot");
-
-        
-             if(NavMesh.CalculatePath(gameObject.transform.position, destPoint, agent.GetComponent<EnemyStateManager>().areaMask, path))
-             {
-                walkPointSet = true;
-                agent.SetPath(path);
-                
-                
-
-
-             }
-             else
-             {
-
-              
-
-             }
-
-        }
-
-        else
-        {
-            Debug.Log("did not find a spot");
-            NewSearchForRandomDestination();
-        }
     }
 
 

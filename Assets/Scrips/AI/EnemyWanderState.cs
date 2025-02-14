@@ -6,6 +6,7 @@ public class EnemyWanderState : EnemyBaseState
     public override void EnterState(EnemyStateManager enemy)
     {
         Debug.Log("wander");
+        enemy.StartCoroutine(enemy.NewSearchForRandomDestination());
     }
 
     public override IEnumerator EnumeratorState(EnemyStateManager enemy)
@@ -17,6 +18,7 @@ public class EnemyWanderState : EnemyBaseState
     public override void ExitState(EnemyStateManager enemy)
     {
         Debug.Log("Ending wander state...");
+        enemy.StopCoroutine(enemy.NewSearchForRandomDestination());
     }
 
     public override void UpdateState(EnemyStateManager enemy)
@@ -25,7 +27,7 @@ public class EnemyWanderState : EnemyBaseState
 
         if (!enemy.playerInSight && !enemy.playerInAttackRange)
         {
-            enemy.NewSearchForRandomDestination();
+            //enemy.NewSearchForRandomDestination();
         }
 
         if(enemy.playerInSight && !enemy.playerInAttackRange)
