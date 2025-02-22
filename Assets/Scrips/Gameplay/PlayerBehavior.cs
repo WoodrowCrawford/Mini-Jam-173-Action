@@ -61,6 +61,7 @@ public class PlayerBehavior : MonoBehaviour
         Wave2AreaBehavior.onWave2Ended += AddHealth;
         Wave3AreaBehavior.onWave3Ended += AddHealth;
         Wave4AreaBehavior.onWave4Ended += AddHealth;
+        Wave5AreaBehavior.onWave5Ended += AddHealth;
     }
 
     private void OnDisable()
@@ -74,6 +75,7 @@ public class PlayerBehavior : MonoBehaviour
         Wave2AreaBehavior.onWave2Ended -= AddHealth;
         Wave3AreaBehavior.onWave3Ended -= AddHealth;
         Wave4AreaBehavior.onWave4Ended -= AddHealth;
+        Wave5AreaBehavior.onWave5Ended -= AddHealth;
     }
 
 
