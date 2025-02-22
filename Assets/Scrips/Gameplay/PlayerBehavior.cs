@@ -59,6 +59,8 @@ public class PlayerBehavior : MonoBehaviour
         //wave clear rewards
         Wave1AreaBehavior.onWave1Ended += AddHealth;
         Wave2AreaBehavior.onWave2Ended += AddHealth;
+        Wave3AreaBehavior.onWave3Ended += AddHealth;
+        Wave4AreaBehavior.onWave4Ended += AddHealth;
     }
 
     private void OnDisable()
@@ -70,6 +72,8 @@ public class PlayerBehavior : MonoBehaviour
 
         Wave1AreaBehavior.onWave1Ended -= AddHealth;
         Wave2AreaBehavior.onWave2Ended -= AddHealth;
+        Wave3AreaBehavior.onWave3Ended -= AddHealth;
+        Wave4AreaBehavior.onWave4Ended -= AddHealth;
     }
 
 
