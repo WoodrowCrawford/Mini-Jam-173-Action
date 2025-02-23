@@ -15,7 +15,7 @@ public class Wave3AreaBehavior : MonoBehaviour
     public bool wave3Started;
     public bool wave3Complete;
 
-    public bool playerIsInsideWave1Area;
+    public bool playerIsInsideWave3Area;
 
     [Header("Spawner Settings")]
     public Transform[] spawnPoints;

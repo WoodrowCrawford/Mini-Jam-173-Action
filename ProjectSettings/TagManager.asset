@@ -16,6 +16,7 @@ TagManager:
   - Wave3Area
   - Wave4Area
   - Wave5Area
+  - Wave6Area
   layers:
   - Default
   - TransparentFX
