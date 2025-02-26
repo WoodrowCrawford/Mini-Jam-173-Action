@@ -64,7 +64,7 @@ public class Wave6AreaBehavior : MonoBehaviour
                 }
 
                 //wait until all the enemies are defeated
-                yield return new WaitUntil(() => GameManager.totalEnemiesDefeated == 6);
+                yield return new WaitUntil(() => GameManager.totalEnemiesDefeated == 20);
 
                 Debug.Log("Player defeated all the enemies");
 

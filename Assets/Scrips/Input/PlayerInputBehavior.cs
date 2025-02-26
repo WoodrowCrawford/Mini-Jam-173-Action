@@ -10,6 +10,7 @@ public class PlayerInputBehavior : MonoBehaviour
     public static event PlayerInputEventHandler OnDodgeStarted;
     public static event PlayerInputEventHandler OnDodgeEnded;
     public static event PlayerInputEventHandler OnAttack;
+    public static event PlayerInputEventHandler OnPause;
 
     [SerializeField] private PlayerControls playerInputActions;    //the player input action map
 
@@ -68,6 +69,8 @@ public class PlayerInputBehavior : MonoBehaviour
 
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
 
+        playerInputActions.Default.Pause.performed += ctx => OnPause?.Invoke();
+
         TimeManipulationBehavior.OnTimeSlowed += () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal += () => playerIsInvulnerable = false;
         
@@ -85,6 +88,8 @@ public class PlayerInputBehavior : MonoBehaviour
         playerInputActions.Default.Attack.performed -= ctx => OnAttack?.Invoke();
 
         playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
+
+        playerInputActions.Default.Pause.performed -= ctx => OnPause?.Invoke();
 
         TimeManipulationBehavior.OnTimeSlowed -= () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal -= () => playerIsInvulnerable = false;
