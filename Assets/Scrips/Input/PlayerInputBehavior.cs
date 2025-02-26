@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -69,7 +70,13 @@ public class PlayerInputBehavior : MonoBehaviour
 
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
 
-        playerInputActions.Default.Pause.performed += ctx => OnPause?.Invoke();
+        playerInputActions.UI.Pause.performed += ctx => OnPause?.Invoke();
+
+        PauseBehavior.onGamePaused += () => playerInputActions.Default.Disable();
+        PauseBehavior.onGamePaused += () => _camera.GetComponent<CinemachineBrain>().enabled = false;
+
+        PauseBehavior.onGameUnpaused += () => playerInputActions.Default.Enable();
+        PauseBehavior.onGameUnpaused += () => _camera.GetComponent<CinemachineBrain>().enabled = true;
 
         TimeManipulationBehavior.OnTimeSlowed += () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal += () => playerIsInvulnerable = false;
@@ -89,7 +96,14 @@ public class PlayerInputBehavior : MonoBehaviour
 
         playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
 
-        playerInputActions.Default.Pause.performed -= ctx => OnPause?.Invoke();
+        playerInputActions.UI.Pause.performed -= ctx => OnPause?.Invoke();
+
+         PauseBehavior.onGamePaused -= () => playerInputActions.Default.Disable();
+         PauseBehavior.onGamePaused -= () => _camera.GetComponent<CinemachineBrain>().enabled = false;
+
+
+        PauseBehavior.onGameUnpaused -= () => playerInputActions.Default.Enable();
+        PauseBehavior.onGameUnpaused += () => _camera.GetComponent<CinemachineBrain>().enabled = true;
 
         TimeManipulationBehavior.OnTimeSlowed -= () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal -= () => playerIsInvulnerable = false;
