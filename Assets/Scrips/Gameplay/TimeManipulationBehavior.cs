@@ -23,9 +23,9 @@ public class TimeManipulationBehavior : MonoBehaviour
 
     private void Awake()
     {
+       
         _vCam = GameObject.FindGameObjectWithTag("vCam").GetComponent<CinemachineCamera>();
         _vCam.GetComponent<CinemachineVolumeSettings>().Profile = null;
-
         
     }
 
@@ -41,6 +41,16 @@ public class TimeManipulationBehavior : MonoBehaviour
         DodgeTriggerBehavior.OnSuccessfulDodge -= () => StartCoroutine(SlowDownTime());
     }
 
+  
+    void Start()
+    {
+       
+    }
+
+    void Update()
+    {
+         _vCam = GameObject.FindGameObjectWithTag("vCam").GetComponent<CinemachineCamera>();
+    }
 
     //Slows down time for a certain amount of time
     public IEnumerator SlowDownTime()

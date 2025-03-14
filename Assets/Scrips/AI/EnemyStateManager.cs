@@ -1,10 +1,4 @@
 using System.Collections;
-using System.IO;
-using Unity.AI.Navigation;
-using Unity.VisualScripting;
-using UnityEditor.Analytics;
-using UnityEditor.PackageManager;
-using UnityEditor.ShaderKeywordFilter;
 using UnityEngine;
 using UnityEngine.AI;
 

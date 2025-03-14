@@ -71,6 +71,9 @@ public class Wave6AreaBehavior : MonoBehaviour
                 //tell the barrier that all the enemies are defeated
                 onWave6Ended?.Invoke();
 
+                //show the win screen
+                WinBehavior.instance.ShowWinScreen();
+
                 yield break;
 
             }

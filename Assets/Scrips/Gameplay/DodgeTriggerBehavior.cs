@@ -3,19 +3,31 @@ using UnityEngine;
 public class DodgeTriggerBehavior : MonoBehaviour
 {
 
+    public static DodgeTriggerBehavior instance;
+
     public delegate void DodgeEventHandler();
 
     public static event DodgeEventHandler OnSuccessfulDodge;
 
-    public EnemyWeaponBehavior enemyWeapon;
-
-  
 
 
-    private void Start()
+   private void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        
 
     }
+
+
 
     private void OnEnable()
     {

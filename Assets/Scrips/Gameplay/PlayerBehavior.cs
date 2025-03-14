@@ -9,7 +9,7 @@ public class PlayerBehavior : MonoBehaviour
     public static event PlayerEventHandler onDeath;
     public static event PlayerEventHandler onHealthChangedCallback;
 
-    public static PlayerBehavior instance;
+   
 
     [SerializeField] public WeaponBehavior weapon;
     public Animator animator;
@@ -33,22 +33,7 @@ public class PlayerBehavior : MonoBehaviour
 
     
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-
-            Destroy(gameObject);
-        }
-
-        
-    }
-
+    
     private void OnEnable()
     {
         onDeath += Die;
@@ -143,6 +128,7 @@ public class PlayerBehavior : MonoBehaviour
     {
         animator.SetTrigger("Die");
         Debug.Log("Die");   
+        
     }
 
     public IEnumerator TakeDamage(int damage)

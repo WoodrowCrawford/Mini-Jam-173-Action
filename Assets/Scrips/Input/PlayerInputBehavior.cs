@@ -56,8 +56,11 @@ public class PlayerInputBehavior : MonoBehaviour
 
     private void OnEnable()
     {
+
+
         playerInputActions = new PlayerControls();
         playerInputActions.Enable();
+  
 
 
         PlayerBehavior.onDeath += () => playerInputActions.Default.Disable();
@@ -70,22 +73,22 @@ public class PlayerInputBehavior : MonoBehaviour
 
         playerInputActions.Default.Dodge.performed += ctx => StartCoroutine(Dash());
 
-        playerInputActions.UI.Pause.performed += ctx => OnPause?.Invoke();
+        playerInputActions.Default.Pause.performed += ctx => OnPause?.Invoke();
 
-        PauseBehavior.onGamePaused += () => playerInputActions.Default.Disable();
-        PauseBehavior.onGamePaused += () => _camera.GetComponent<CinemachineBrain>().enabled = false;
-
-        PauseBehavior.onGameUnpaused += () => playerInputActions.Default.Enable();
-        PauseBehavior.onGameUnpaused += () => _camera.GetComponent<CinemachineBrain>().enabled = true;
+       
 
         TimeManipulationBehavior.OnTimeSlowed += () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal += () => playerIsInvulnerable = false;
+
+        WinBehavior.onWinScreenShown += () => playerInputActions.Disable();
         
     }
 
     private void OnDisable()
     {
+        
         playerInputActions.Disable();
+        
 
         PlayerBehavior.onDeath -= () => playerInputActions.Default.Disable();
 
@@ -96,18 +99,14 @@ public class PlayerInputBehavior : MonoBehaviour
 
         playerInputActions.Default.Dodge.performed -= ctx => StartCoroutine(Dash());
 
-        playerInputActions.UI.Pause.performed -= ctx => OnPause?.Invoke();
+        playerInputActions.Default.Pause.performed -= ctx => OnPause?.Invoke();
 
-         PauseBehavior.onGamePaused -= () => playerInputActions.Default.Disable();
-         PauseBehavior.onGamePaused -= () => _camera.GetComponent<CinemachineBrain>().enabled = false;
-
-
-        PauseBehavior.onGameUnpaused -= () => playerInputActions.Default.Enable();
-        PauseBehavior.onGameUnpaused += () => _camera.GetComponent<CinemachineBrain>().enabled = true;
 
         TimeManipulationBehavior.OnTimeSlowed -= () => playerIsInvulnerable = true;
         TimeManipulationBehavior.OnTimeNormal -= () => playerIsInvulnerable = false;
       
+
+       WinBehavior.onWinScreenShown -= () => playerInputActions.Disable();
     }
 
 
